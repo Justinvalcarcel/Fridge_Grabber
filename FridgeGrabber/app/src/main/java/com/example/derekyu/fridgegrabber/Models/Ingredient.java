@@ -7,6 +7,12 @@ import android.os.Parcelable;
  * Created by derekyu on 4/3/15.
  */
 public class Ingredient implements Parcelable {
+
+    private String name;
+    private String foodGroup;
+
+
+
     @Override
     public int describeContents() {
         return 0;

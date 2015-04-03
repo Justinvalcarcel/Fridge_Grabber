@@ -24,6 +24,10 @@
             android:name=".Controller.FavoriteRecipeListActivity"
             android:label="@string/title_activity_favorite_recipe_list" >
         </activity>
+        <activity
+            android:name=".Controller.ViewIngredientsActivity"
+            android:label="@string/title_activity_view_ingredients" >
+        </activity>
     </application>
 
 </manifest>
