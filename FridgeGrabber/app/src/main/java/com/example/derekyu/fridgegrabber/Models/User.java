@@ -14,6 +14,10 @@ public class User implements Parcelable {
     private ArrayList<Ingredient> fridge;
 
 
+public User(String name){
+    this.name = name;
+}
+
     @Override
     public int describeContents() {
         return 0;
@@ -22,6 +26,19 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>(){
+        public User createFromParcel(Parcel in){ return new User(in); }
+
+        public User[] newArray(int size){ return new User[size]; }
+
+    };
+
+    public User(Parcel p){
+        name = p.readString();
+        favorites = p.readArrayList(Recipe.class.getClassLoader());
+        fridge = p.readArrayList(Ingredient.class.getClassLoader());
     }
 
 

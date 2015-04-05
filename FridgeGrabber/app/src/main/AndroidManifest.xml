@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".Controller.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +28,12 @@
             android:name=".Controller.ViewIngredientsActivity"
             android:label="@string/title_activity_view_ingredients" >
         </activity>
+        <activity
+            android:name=".Controller.ModifyIngredientsActivity"
+            android:label="@string/title_activity_modify_ingredients" >
+        </activity>
+
+
     </application>
 
 </manifest>

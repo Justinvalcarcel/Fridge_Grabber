@@ -6,4 +6,16 @@
     <string name="title_activity_view_recipe">ViewRecipe</string>
     <string name="title_activity_favorite_recipe_list">FavoriteRecipeListActivity</string>
     <string name="title_activity_view_ingredients">ViewIngredientsActivity</string>
+    <string name="title_activity_modify_ingredients">ModifyIngredientsActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_action_bar_fragment">ActionBarFragment</string>
+    <string name="title_activity_test">test</string>
+
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_action_bar_navigation_activty">ActionBarNavigationActivty</string>
 </resources>
