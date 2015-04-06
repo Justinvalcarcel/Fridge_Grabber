@@ -3,9 +3,9 @@ package com.example.derekyu.fridgegrabber.Controller;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.app.DialogFragment;
 
 /**
  * Created by Stephen on 4/4/2015.
@@ -15,6 +15,7 @@ import android.os.Bundle;
 
 
 public class RemoveTagDialogFragment extends DialogFragment {
+
 
     public interface RemoveTagDialogFragmentListener
     {

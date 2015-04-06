@@ -19,7 +19,7 @@
         android:layout_toRightOf="@+id/edittextingredients"
         android:text="Add"/>
 
-    <fridgegrabber.addingredients.PredicateLayout
+    <com.example.derekyu.fridgegrabber.tools.PredicateLayout
         android:id="@+id/predicate_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

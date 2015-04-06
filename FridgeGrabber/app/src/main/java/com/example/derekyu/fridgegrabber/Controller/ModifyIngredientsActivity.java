@@ -2,11 +2,8 @@ package com.example.derekyu.fridgegrabber.Controller;
 
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.app.Activity;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import com.example.derekyu.fridgegrabber.R;
+import com.example.derekyu.fridgegrabber.tools.PredicateLayout;
 
 public class ModifyIngredientsActivity extends Activity implements RemoveTagDialogFragment.RemoveTagDialogFragmentListener{
 
@@ -44,7 +42,7 @@ public class ModifyIngredientsActivity extends Activity implements RemoveTagDial
                 if (!ingredientName.isEmpty() && ingredientName.matches("[a-zA-Z]+"))
                 {
                     //create new textview visual "tag" in the PredicateLayout
-                    TextView tag = new TextView(ModifyIngredients.this);
+                    TextView tag = new TextView(ModifyIngredientsActivity.this);
                     tag.setText(ingredientName);
                     tag.setBackgroundColor(Color.CYAN);
                     tag.setSingleLine(false);
