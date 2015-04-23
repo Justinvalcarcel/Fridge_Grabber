@@ -14,9 +14,9 @@ public class User implements Parcelable {
     private ArrayList<Ingredient> fridge;
 
 
-public User(String name){
-    this.name = name;
-}
+    public User(String name){
+        this.name = name;
+    }
 
     @Override
     public int describeContents() {
