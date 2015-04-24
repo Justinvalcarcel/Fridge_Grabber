@@ -65,12 +65,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         COLUMN_RINSTRUCTIONS + " TEXT, " +
                         COLUMN_RSTATUS + " TEXT) "
         );
-        /*
+
         db.execSQL("CREATE TABLE " + TABLE_RECIPE_INGREDIENT + " ( " +
                         COLUMN_RID + " INTEGER REFERENCES RECIPE(rid), " +
                         COLUMN_IID + " INTEGER REFERENCES INGREDIENT(iid)) "
         );
-        */
+
         db.execSQL("CREATE TABLE " + TABLE_INGREDIENT + " ( " +
                         COLUMN_IID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         COLUMN_INAME + " TEXT, " +
@@ -92,7 +92,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    //We need to design the Recipe class so we can use the getters
     public void insertRecipe(Recipe recipe) {
 
         ContentValues cv = new ContentValues();
@@ -102,18 +101,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_RSTATUS, recipe.getStatus());
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_RECIPE, null, cv);
-        db.close();
-    }
-    //Inserts ingredient with the most recently inserted Recipe
-    public void insertRecipeIngredients(Ingredient ingredient){
 
-        ContentValues cv = new ContentValues();
-        cv.put(COLUMN_RID, this.getRecipeID());
-        cv.put(COLUMN_IID,this.getIngredientID(ingredient));
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_RECIPE_INGREDIENT, null, cv);
+        //inserts the ingredients into the RECIPE_INGREDIENT table
+        ArrayList<Ingredient> ingredients = recipe.getIngredients();
+        for (Ingredient ingredient : ingredients) {
+            ContentValues cv1 = new ContentValues();
+            cv1.put(COLUMN_RID, recipe.getId());
+            cv1.put(COLUMN_IID, ingredient.getName());
+            db.insert(TABLE_RECIPE_INGREDIENT, null, cv1);
+        }
         db.close();
-
     }
 
     //adds new ingredients
@@ -180,8 +177,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return ingredientID;
     }
 
+    //Use the Recipe as the parameter to get the Recipe object
+    public Recipe getRecipe(String id) {
 
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_RECIPE +
+                        " WHERE " + COLUMN_RID +
+                        " = ?",
+                new String[]{id});
+
+        Recipe recipe = null;
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+            recipe = new Recipe(null, null, null, null, null, null);
+            recipe.setId(cursor.getString(0));
+            recipe.setName(cursor.getString(1));
+            recipe.setTime(cursor.getString(2));
+            recipe.setInstructions(cursor.getString(3));
+            recipe.setStatus(cursor.getString(4));
+            }
+        db.close();
+        return recipe;
+    }
+
+    //returns names of all ingredients in recipe
+    public List<Ingredient> getRecipeIngredients(String id){
+        List<Ingredient> ingredientList = new ArrayList<Ingredient>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_RECIPE_INGREDIENT +
+                " WHERE " + COLUMN_RID +
+                " = ?",
+                new String[]{id});
+
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+            Ingredient ingredient = new Ingredient(null,null,null,null);
+
+            ingredient.setName(cursor.getString(1));
+            ingredient.setFoodGroup(cursor.getString(2));
+            //ingredient.setQuantity(cursor.getString(3));
+            //ingredient.setExpiration(cursor.getString(4));
+            ingredientList.add(ingredient);
+        }
+        db.close();
+        return ingredientList;
+    }
 
     //This will return a list of all recipes. I can modify it to return only certain types
     public List<Recipe> getAllRecipes() {
@@ -227,7 +270,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             recipeList.add(recipe);
         }
-
+        db.close();
         return recipeList;
     }
 
@@ -252,7 +295,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             recipeList.add(recipe);
         }
-
+        db.close();
         return recipeList;
     }
 
