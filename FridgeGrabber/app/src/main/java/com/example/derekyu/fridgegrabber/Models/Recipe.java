@@ -18,8 +18,20 @@ public class Recipe implements Parcelable{
     private String status;
     private ArrayList<Ingredient> ingredients;
 
+    // Parcelable creator - Do not modify this function
+    public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
+        public Recipe createFromParcel(Parcel p) {
+            return new Recipe(p);
+        }
+
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
+
+
     public Recipe(String id1, String name1, String time1, String instructions1,
-                  String status1, ArrayList<com.example.derekyu.fridgegrabber.Models.Ingredient> ingredients1){
+                  String status1, ArrayList<Ingredient> ingredients1){
         this.id = id1;
         this.name = name1;
         this.time = time1;
@@ -28,14 +40,33 @@ public class Recipe implements Parcelable{
         this.ingredients = ingredients1;
     }
 
+    // Constructor from parcel
+    public Recipe (Parcel p)
+    {
+        this.id = p.readString();
+        this.name = p.readString();
+        this.time = p.readString();
+        this.instructions = p.readString();
+        this.status = p.readString();
+        this.ingredients = new ArrayList<Ingredient>();
+        p.readTypedList(this.ingredients, Ingredient.CREATOR);
+
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
+    public void writeToParcel(Parcel dest, int flags)
+    {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.time);
+        dest.writeString(this.instructions);
+        dest.writeString(this.status);
+        dest.writeTypedList(this.ingredients);
     }
 
     public String getId() {
@@ -78,11 +109,11 @@ public class Recipe implements Parcelable{
         this.status = status;
     }
 
-    public ArrayList<com.example.derekyu.fridgegrabber.Models.Ingredient> getIngredients() {
+    public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(ArrayList<com.example.derekyu.fridgegrabber.Models.Ingredient> ingredients) {
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 }

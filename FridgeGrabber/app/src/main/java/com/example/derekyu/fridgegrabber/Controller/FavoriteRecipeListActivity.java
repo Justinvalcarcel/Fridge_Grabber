@@ -29,13 +29,13 @@ public class FavoriteRecipeListActivity extends ActionBarActivity {
 
 
         //Uncomment this section if you want to have a test run
-
+        /*
         Ingredient ingredient = new Ingredient("Cheese","dairy","5","April 5");
         ArrayList<Ingredient> inglist = new ArrayList<Ingredient>();
         inglist.add(ingredient);
         Recipe test = new Recipe("1","Tacos", "45 minutes", "Cook them!", "favorite", inglist);
         db.insertRecipe(test);
-
+        */
         //Test End
 
         //recipeList is a list of all favorited recipes

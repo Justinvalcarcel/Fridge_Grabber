@@ -36,20 +36,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Recipe and ingredient relationship
     private static final String TABLE_RECIPE_INGREDIENT= "recipe_ingredient";
-    //private static final String COLUMN_RID =  "rid";
-    //private static final String COLUMN_IID = "iid";
+    private static final String COLUMN_RECIPE_INGREDIENT_RID =  "rid";
+    private static final String COLUMN_RECIPE_INGREDIENT_IID = "iid";
 
     //Ingredients table
     private static final String TABLE_INGREDIENT= "ingredient";
     private static final String COLUMN_IID =  "iid";
     private static final String COLUMN_INAME = "iname";
-    private static final String COLUMN_ITYPE = "itype";
+    //private static final String COLUMN_ITYPE = "itype"; // this is ingredient foodgroup
 
     //Table of what ingredients the user has
     private static final String TABLE_PANTRY= "pantry";
-    //private static final String COLUMN_IID =  "iid";
-    private static final String COLUMN_PQUANTITY = "quantity";
-    private static final String COLUMN_PEXPIRATION = "expiration";
+    private static final String COLUMN_PANTRY_IID =  "iid";
+    //private static final String COLUMN_PQUANTITY = "quantity";
+    //private static final String COLUMN_PEXPIRATION = "expiration";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -63,32 +63,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         COLUMN_RNAME + " TEXT, " +
                         COLUMN_RTIME + " TEXT, " +
                         COLUMN_RINSTRUCTIONS + " TEXT, " +
-                        COLUMN_RSTATUS + " TEXT) "
+                        COLUMN_RSTATUS + " TEXT)"
         );
 
         db.execSQL("CREATE TABLE " + TABLE_RECIPE_INGREDIENT + " ( " +
-                        COLUMN_RID + " INTEGER REFERENCES RECIPE(rid), " +
-                        COLUMN_IID + " INTEGER REFERENCES INGREDIENT(iid)) "
+                        COLUMN_RECIPE_INGREDIENT_RID + " INTEGER REFERENCES RECIPE(rid), " +
+                        COLUMN_RECIPE_INGREDIENT_IID + " INTEGER REFERENCES INGREDIENT(iid))"
         );
 
         db.execSQL("CREATE TABLE " + TABLE_INGREDIENT + " ( " +
                         COLUMN_IID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        COLUMN_INAME + " TEXT, " +
-                        COLUMN_ITYPE + " TEXT) "
+                        COLUMN_INAME + " TEXT)"
         );
+
         db.execSQL("CREATE TABLE " + TABLE_PANTRY + " ( " +
-                        COLUMN_IID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        COLUMN_PQUANTITY + " TEXT, " +
-                        COLUMN_PEXPIRATION + " TEXT) "
+                        COLUMN_PANTRY_IID + " INTEGER REFERENCES INGREDIENT(iid))"
         );
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPE);
+
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPE_INGREDIENT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INGREDIENT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PANTRY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INGREDIENT);
         onCreate(db);
     }
 
@@ -110,17 +110,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cv1.put(COLUMN_IID, ingredient.getName());
             db.insert(TABLE_RECIPE_INGREDIENT, null, cv1);
         }
-        db.close();
     }
 
     //adds new ingredients
     public void insertIngredient(Ingredient ingredient){
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_INAME, ingredient.getName());
-        cv.put(COLUMN_ITYPE, ingredient.getFoodGroup());
+        //cv.put(COLUMN_ITYPE, ingredient.getFoodGroup());
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_INGREDIENT, null, cv);
-        db.close();
 
     }
 
@@ -129,16 +127,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_INAME, ingredient.getName());
-        cv.put(COLUMN_PQUANTITY, ingredient.getQuantity());
-        cv.put(COLUMN_PEXPIRATION, ingredient.getExpiration());
+        //cv.put(COLUMN_PQUANTITY, ingredient.getQuantity());
+        //cv.put(COLUMN_PEXPIRATION, ingredient.getExpiration());
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_PANTRY, null, cv);
-        db.close();
     }
 
 
 
-    //TODO needs fixing
     // returns the most recently inserted Recipe ID
     public String getRecipeID(){
 
@@ -153,7 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             recipeID = "0";
 
         cursor.close();
-        db.close();
+
         return recipeID;
     }
 
@@ -173,7 +169,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ingredientID = "0";
 
         cursor.close();
-        db.close();
         return ingredientID;
     }
 
@@ -188,47 +183,69 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{id});
 
         Recipe recipe = null;
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
+        {
+            /*
             recipe = new Recipe(null, null, null, null, null, null);
             recipe.setId(cursor.getString(0));
             recipe.setName(cursor.getString(1));
             recipe.setTime(cursor.getString(2));
             recipe.setInstructions(cursor.getString(3));
             recipe.setStatus(cursor.getString(4));
-            }
-        db.close();
+            */
+
+            String recipeID = cursor.getString(0);
+            String recipeName = cursor.getString(1);
+            String recipeTime = cursor.getString(2);
+            String recipeInstructions = cursor.getString(3);
+            String recipeStatus = cursor.getString(4);
+
+            //query for ingredients corresponding to this recipe id and populate arraylist with model objects
+            ArrayList<Ingredient> ingredients = getRecipeIngredients(recipeID);
+
+            recipe = new Recipe(recipeID, recipeName, recipeTime, recipeInstructions, recipeStatus, ingredients);
+        }
+
         return recipe;
     }
 
-    //returns names of all ingredients in recipe
-    public List<Ingredient> getRecipeIngredients(String id){
-        List<Ingredient> ingredientList = new ArrayList<Ingredient>();
+
+    //returns names of all ingredients in recipe when given recipe id
+    public ArrayList<Ingredient> getRecipeIngredients(String id){
+        ArrayList<Ingredient> ingredientList = new ArrayList<Ingredient>();
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_RECIPE_INGREDIENT +
-                " WHERE " + COLUMN_RID +
+        // queries from the natural join of recipe_ingredient and ingredient tables for the name of ingredients that correspond to the recipe id
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_INAME +
+                " FROM " + TABLE_RECIPE_INGREDIENT + " NATURAL JOIN " + TABLE_INGREDIENT +
+                " WHERE " + COLUMN_RECIPE_INGREDIENT_RID +
                 " = ?",
                 new String[]{id});
 
+        // loop through query results and construct ingredient model object from each row returned
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
+            /*
             Ingredient ingredient = new Ingredient(null,null,null,null);
 
             ingredient.setName(cursor.getString(1));
-            ingredient.setFoodGroup(cursor.getString(2));
+            //ingredient.setFoodGroup(cursor.getString(2));
             //ingredient.setQuantity(cursor.getString(3));
             //ingredient.setExpiration(cursor.getString(4));
-            ingredientList.add(ingredient);
+            */
+
+            String ingredientName = cursor.getString(0);
+
+            ingredientList.add(new Ingredient(ingredientName));
         }
-        db.close();
+
         return ingredientList;
     }
 
     //This will return a list of all recipes. I can modify it to return only certain types
-    public List<Recipe> getAllRecipes() {
-        List<Recipe> recipeList = new ArrayList<Recipe>();
+    public ArrayList<Recipe> getAllRecipes() {
+        ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         //
@@ -236,14 +253,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
+            /*
             Recipe recipe = new Recipe(null,null,null,null,null,null);
             recipe.setId(cursor.getString(0));
             recipe.setName(cursor.getString(1));
             recipe.setTime(cursor.getString(2));
             recipe.setInstructions(cursor.getString(3));
             recipe.setStatus(cursor.getString(4));
+            */
 
-            recipeList.add(recipe);
+            String recipeID = cursor.getString(0);
+            String recipeName = cursor.getString(1);
+            String recipeTime = cursor.getString(2);
+            String recipeInstructions = cursor.getString(3);
+            String recipeStatus = cursor.getString(4);
+
+            //query for ingredients corresponding to this recipe id and populate arraylist with model objects
+            ArrayList<Ingredient> ingredients = getRecipeIngredients(recipeID);
+
+            recipeList.add(new Recipe(recipeID, recipeName, recipeTime, recipeInstructions, recipeStatus, ingredients));
         }
 
         return recipeList;
@@ -261,6 +289,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
+            /*
             Recipe recipe = new Recipe(null,null,null,null,null,null);
             recipe.setId(cursor.getString(0));
             recipe.setName(cursor.getString(1));
@@ -269,8 +298,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             recipe.setStatus(cursor.getString(4));
 
             recipeList.add(recipe);
+            */
+
+            String recipeID = cursor.getString(0);
+            String recipeName = cursor.getString(1);
+            String recipeTime = cursor.getString(2);
+            String recipeInstructions = cursor.getString(3);
+            String recipeStatus = cursor.getString(4);
+
+            //query for ingredients corresponding to this recipe id and populate arraylist with model objects
+            ArrayList<Ingredient> ingredients = getRecipeIngredients(recipeID);
+
+            recipeList.add(new Recipe(recipeID, recipeName, recipeTime, recipeInstructions, recipeStatus, ingredients));
+
         }
-        db.close();
+
         return recipeList;
     }
 
@@ -295,7 +337,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             recipeList.add(recipe);
         }
-        db.close();
+
         return recipeList;
     }
 
