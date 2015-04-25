@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.derekyu.fridgegrabber" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/MyActionBarTheme" >
         <activity
             android:name=".Controller.ViewRecipe"
             android:label="@string/title_activity_view_recipe" >
@@ -35,6 +37,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Controller.DetailsActivity"
+            android:label="@string/title_activity_details" >
         </activity>
     </application>
 

@@ -17,6 +17,8 @@ public class Recipe implements Parcelable{
     private String instructions;
     private String status;
     private ArrayList<Ingredient> ingredients;
+    private String url;
+    private String imgUrl;
 
     // Parcelable creator - Do not modify this function
     public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
@@ -40,6 +42,9 @@ public class Recipe implements Parcelable{
         this.ingredients = ingredients1;
     }
 
+    //blank Constructor
+    public Recipe(){}
+
     // Constructor from parcel
     public Recipe (Parcel p)
     {
@@ -50,6 +55,8 @@ public class Recipe implements Parcelable{
         this.status = p.readString();
         this.ingredients = new ArrayList<Ingredient>();
         p.readTypedList(this.ingredients, Ingredient.CREATOR);
+        this.imgUrl = p.readString();
+        this.url = p.readString();
 
     }
 
@@ -67,6 +74,8 @@ public class Recipe implements Parcelable{
         dest.writeString(this.instructions);
         dest.writeString(this.status);
         dest.writeTypedList(this.ingredients);
+        dest.writeString(this.imgUrl);
+        dest.writeString(this.url);
     }
 
     public String getId() {
@@ -115,5 +124,14 @@ public class Recipe implements Parcelable{
 
     public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+    public void setUrl(String url){this.url = url;}
+
+    public String getUrl(){return url;}
+
+    public String getImgUrl(){return imgUrl;}
+
+    public void setImgUrl(String imgUrl){
+        this.imgUrl = imgUrl;
     }
 }

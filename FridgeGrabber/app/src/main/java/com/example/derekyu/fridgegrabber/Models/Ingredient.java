@@ -38,6 +38,7 @@ public class Ingredient implements Parcelable {
     }
     */
 
+
     // Constructor from passed in arguments
     public Ingredient(String name)
     {
