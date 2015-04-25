@@ -59,7 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("CREATE TABLE " + TABLE_RECIPE + " ( " +
-                        COLUMN_RID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COLUMN_RID + " TEXT PRIMARY KEY, " +
                         COLUMN_RNAME + " TEXT, " +
                         COLUMN_RTIME + " TEXT, " +
                         COLUMN_RINSTRUCTIONS + " TEXT, " +
@@ -95,6 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void insertRecipe(Recipe recipe) {
 
         ContentValues cv = new ContentValues();
+        cv.put(COLUMN_RID, recipe.getId());
         cv.put(COLUMN_RNAME, recipe.getName());
         cv.put(COLUMN_RTIME, recipe.getTime());
         cv.put(COLUMN_RINSTRUCTIONS, recipe.getInstructions());
@@ -102,23 +103,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_RECIPE, null, cv);
 
+        //first check if ingredients are in the ingredient table, if they are, get their ids, if not insert them and get the id from the insert
         //inserts the ingredients into the RECIPE_INGREDIENT table
         ArrayList<Ingredient> ingredients = recipe.getIngredients();
         for (Ingredient ingredient : ingredients) {
+
+            //query db to see if ingredient already has a row in the ingredient table
+            Cursor c = queryIngredientIDFromIngredientTable(ingredient);
+
+            long ingredientID;
+            // if query returns a result, get the ingredient id from the returned query
+            if (c.getCount() > 0)
+            {
+                c.moveToFirst();
+                ingredientID = c.getLong(0);
+            }
+            // no results, insert into ingredient table and get the ingredient id after inserting
+            else
+            {
+                ingredientID = insertIngredient(ingredient);
+            }
+
             ContentValues cv1 = new ContentValues();
-            cv1.put(COLUMN_RID, recipe.getId());
-            cv1.put(COLUMN_IID, ingredient.getName());
+            cv1.put(COLUMN_RECIPE_INGREDIENT_RID, recipe.getId());
+            cv1.put(COLUMN_RECIPE_INGREDIENT_IID, ingredientID);
+            //cv1.put(COLUMN_RECIPE_INGREDIENT_IID, ingredient.getName());
+
+
             db.insert(TABLE_RECIPE_INGREDIENT, null, cv1);
         }
     }
 
+    // returns a cursor object representing query result (for id) from ingredient table for a passed in ingredient
+    public Cursor queryIngredientIDFromIngredientTable(Ingredient ingredient)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_IID +
+                        " FROM " + TABLE_INGREDIENT +
+                        " WHERE " + COLUMN_INAME + " = ?",
+                new String [] {ingredient.getName()}
+        );
+
+        return cursor;
+    }
+
+
     //adds new ingredients
-    public void insertIngredient(Ingredient ingredient){
+    public long insertIngredient(Ingredient ingredient){
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_INAME, ingredient.getName());
         //cv.put(COLUMN_ITYPE, ingredient.getFoodGroup());
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_INGREDIENT, null, cv);
+        return db.insert(TABLE_INGREDIENT, null, cv);
 
     }
 
@@ -153,6 +189,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return recipeID;
     }
 
+    /*
     //returns the Ingredient ID by the name input
     public String getIngredientID(Ingredient ingredient){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -171,6 +208,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return ingredientID;
     }
+    */
 
     //Use the Recipe as the parameter to get the Recipe object
     public Recipe getRecipe(String id) {

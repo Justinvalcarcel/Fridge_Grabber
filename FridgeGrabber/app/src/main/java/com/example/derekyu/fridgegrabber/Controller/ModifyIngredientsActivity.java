@@ -4,6 +4,7 @@ package com.example.derekyu.fridgegrabber.Controller;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +47,8 @@ public class ModifyIngredientsActivity extends Activity implements RemoveTagDial
 
         currentIngredPredLayout = (PredicateLayout) findViewById(R.id.predicate_layout_current_ingred);
 
+
+        // ADD BUTTON ~~~~~~~~~
         Button addButton = (Button) findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
@@ -68,6 +71,20 @@ public class ModifyIngredientsActivity extends Activity implements RemoveTagDial
 
             }
         });
+
+        // DONE BUTTON ~~~~~~~~~
+        Button doneButton = (Button) findViewById(R.id.done_button);
+        doneButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v)
+            {
+                DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+
+                Log.d("BLah", db.getRecipeID());
+            }
+
+        });
+
 
 
         //POPULATE DAIRY PREDICATE LAYOUT
