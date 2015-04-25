@@ -17,13 +17,82 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/edittextingredients"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
         android:text="Add"/>
 
     <com.example.derekyu.fridgegrabber.tools.PredicateLayout
-        android:id="@+id/predicate_layout"
+        android:id="@+id/predicate_layout_current_ingred"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/edittextingredients"
         />
+
+    <TextView
+        android:id="@+id/dairy_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/predicate_layout_current_ingred"
+        android:text="DAIRY"/>
+
+    <com.example.derekyu.fridgegrabber.tools.PredicateLayout
+        android:id="@+id/predicate_layout_common_dairy"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dairy_label"
+        />
+
+    <TextView
+        android:id="@+id/protein_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/predicate_layout_common_dairy"
+        android:text="PROTEIN"/>
+
+    <com.example.derekyu.fridgegrabber.tools.PredicateLayout
+        android:id="@+id/predicate_layout_common_protein"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/protein_label"
+        />
+
+    <TextView
+        android:id="@+id/vegetables_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/predicate_layout_common_protein"
+        android:text="VEGETABLES"/>
+
+    <com.example.derekyu.fridgegrabber.tools.PredicateLayout
+        android:id="@+id/predicate_layout_common_vegetables"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/vegetables_label"
+        />
+
+    <TextView
+        android:id="@+id/fruits_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/predicate_layout_common_vegetables"
+        android:text="FRUITS"/>
+
+    <com.example.derekyu.fridgegrabber.tools.PredicateLayout
+        android:id="@+id/predicate_layout_common_fruits"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fruits_label"
+        />
+
+    <Button
+        android:id = "@+id/done_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/predicate_layout_common_fruits"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:layout_centerHorizontal="true"
+        android:text="Done"/>
+
 
 </RelativeLayout>
