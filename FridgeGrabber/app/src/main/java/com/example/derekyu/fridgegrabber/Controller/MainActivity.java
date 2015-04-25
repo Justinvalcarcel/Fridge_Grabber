@@ -1,29 +1,18 @@
 package com.example.derekyu.fridgegrabber.Controller;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.derekyu.fridgegrabber.R;
-import com.example.derekyu.fridgegrabber.tools.SlidingTabLayout;
 
-public class MainActivity extends ActionBarActivity implements RemoveTagDialogFragment.RemoveTagDialogFragmentListener {
+public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // creates a view pager to generate the actionbar with tabs
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new OptionsFragAdapter(getSupportFragmentManager(),
-                MainActivity.this));
-        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
-        slidingTabLayout.setDistributeEvenly(true);
-        slidingTabLayout.setViewPager(viewPager);
     }
 
 
@@ -47,10 +36,5 @@ public class MainActivity extends ActionBarActivity implements RemoveTagDialogFr
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFinishRemoveTagDialogFragment(int resultCode, String ingredientName) {
-
     }
 }
