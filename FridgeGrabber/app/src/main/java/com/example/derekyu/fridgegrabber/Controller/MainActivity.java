@@ -53,6 +53,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getActionBar();
         String s = "FridgeGrabber";
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(s);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycleList);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -60,18 +62,24 @@ public class MainActivity extends Activity {
         recyclerView.setLayoutManager(layoutManager);
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
         userIngredients = (ArrayList<Ingredient>) db.getPantry();
-        //execute AsyncTask to get Data and display a list of recipes
-        String tempUrl = url;
-        tempUrl = tempUrl.concat(userIngredients.get(0).getName());
-        for (int i = 1; i < userIngredients.size(); i++) {
-            tempUrl = tempUrl.concat("%20" + userIngredients.get(i).getName());
+        String tempUrl;
+        if(userIngredients.size() != 0) {
+            //execute AsyncTask to get Data and display a list of recipes
+            tempUrl = url;
+            tempUrl = tempUrl.concat(userIngredients.get(0).getName());
+            for (int i = 1; i < userIngredients.size(); i++) {
+                tempUrl = tempUrl.concat("%20" + userIngredients.get(i).getName());
+
+            }
+            tempUrl = tempUrl.concat(apikey);
+            tempUrl = tempUrl.replaceAll(" ", "%20");
+            Log.d("newURL", tempUrl);
 
         }
-        tempUrl = tempUrl.concat(apikey);
-        tempUrl = tempUrl.replaceAll(" ", "%20");
-        Log.d("newURL", tempUrl);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(s);
+        else {
+            tempUrl = "http://api.bigoven.com/recipes?pg=1&rpp=5&api_key=dvxTtAMf3IHeKp2MWGcw564P1drhT4ep";
+
+        }
         new RecipeSyncTask().execute(tempUrl);
     }
 
@@ -222,6 +230,9 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Loading...", Toast.LENGTH_LONG).show();
+            if (userIngredients.size() ==0){
+                Toast.makeText(getBaseContext(), "No Ingredients Were Entered", Toast.LENGTH_LONG).show();
+            }
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycleList);
             RecipeRecycleAdapter rp = new RecipeRecycleAdapter(recipeList, matchPercentage);
             recyclerView.setAdapter(rp);
