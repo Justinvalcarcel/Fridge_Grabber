@@ -3,6 +3,7 @@ package com.example.derekyu.fridgegrabber.Controller;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,11 +58,8 @@ public class MainActivity extends Activity {
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        userIngredients = new ArrayList<Ingredient>();
-        Ingredient i1 = new Ingredient("broccoli");
-        Ingredient i2 = new Ingredient("tomato");
-        userIngredients.add(i1);
-        userIngredients.add(i2);
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        userIngredients = (ArrayList<Ingredient>) db.getPantry();
         //execute AsyncTask to get Data and display a list of recipes
         String tempUrl = url;
         tempUrl = tempUrl.concat(userIngredients.get(0).getName());
@@ -70,6 +68,7 @@ public class MainActivity extends Activity {
 
         }
         tempUrl = tempUrl.concat(apikey);
+        tempUrl = tempUrl.replaceAll(" ", "%20");
         Log.d("newURL", tempUrl);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(s);
@@ -80,6 +79,18 @@ public class MainActivity extends Activity {
     protected void onStart() {
         super.onStart();
         mContext = this;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_main);
+
+        } else {
+            setContentView(R.layout.activity_main);
+        }
     }
 
     public static String GET(String url) {
@@ -139,6 +150,10 @@ public class MainActivity extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        else if ( id == R.id.modify_ingredients){
+            Intent intent = new Intent(MainActivity.this, ModifyIngredientsActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -231,6 +246,8 @@ public class MainActivity extends Activity {
         Double counter = 0.0d;
         for ( Ingredient i : recipe.getIngredients()){
             for (Ingredient x: userIngredients){
+                Log.d("x", x.getName().toLowerCase());
+                Log.d("i", i.getName().toLowerCase());
                 if (x.getName().toLowerCase().contains(i.getName().toLowerCase()) || i.getName().toLowerCase().contains(x.getName().toLowerCase())){
 
                     counter +=1;
@@ -241,4 +258,9 @@ public class MainActivity extends Activity {
         matchPercentage.add(Math.round(100.0*matchPercent)/100.0);
 
     }
+
+
+
+
+
 }

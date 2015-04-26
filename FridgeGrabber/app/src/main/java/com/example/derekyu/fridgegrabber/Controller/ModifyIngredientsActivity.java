@@ -1,11 +1,14 @@
 package com.example.derekyu.fridgegrabber.Controller;
 
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +43,9 @@ public class ModifyIngredientsActivity extends Activity implements RemoveTagDial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_ingredients);
-
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("FridgeGrabber");
 
         // hashmap that holds string-textview key-value pairs
         ingredientTags = new HashMap<>();
@@ -280,5 +285,20 @@ public class ModifyIngredientsActivity extends Activity implements RemoveTagDial
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
+        if (id == R.id.recipes){
+            Intent intent = new Intent(ModifyIngredientsActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_modify_ingredients, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }
