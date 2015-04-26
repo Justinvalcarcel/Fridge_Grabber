@@ -147,7 +147,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-
+    public Cursor queryIngredientIDFromPantry(Ingredient ingredient){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_PANTRY_IID + " FROM "
+                            + TABLE_PANTRY + " NATURAL JOIN " + TABLE_INGREDIENT +  " WHERE " + COLUMN_INAME + " =?",
+                new String [] {ingredient.getName()}) ;
+        return cursor;
+    }
     //adds new ingredients
     public long insertIngredient(Ingredient ingredient){
         ContentValues cv = new ContentValues();
@@ -162,14 +168,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void insertPantry(Ingredient ingredient) {
 
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_INAME, ingredient.getName());
+        // cv.put(COLUMN_INAME, ingredient.getName());
         //cv.put(COLUMN_PQUANTITY, ingredient.getQuantity());
         //cv.put(COLUMN_PEXPIRATION, ingredient.getExpiration());
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_PANTRY, null, cv);
+        Cursor c = queryIngredientIDFromIngredientTable(ingredient);
+        Cursor pantryCursor = queryIngredientIDFromPantry(ingredient);
+        if (pantryCursor.getCount() == 0) {
+            if (c.getCount() > 0) {
+
+                c.moveToFirst();
+                cv.put(COLUMN_PANTRY_IID, c.getLong(0));
+                db.insert(TABLE_PANTRY, null, cv);
+            } else {
+                long id = insertIngredient(ingredient);
+                cv.put(COLUMN_PANTRY_IID, id);
+                db.insert(TABLE_PANTRY, null, cv);
+            }
+
+        }
+
     }
-
-
 
     // returns the most recently inserted Recipe ID
     public String getRecipeID(){
@@ -378,6 +397,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return recipeList;
     }
+
+    public List<Ingredient> getPantry(){
+        List<Ingredient> pantry = new ArrayList<Ingredient>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_INAME +" FROM " + TABLE_PANTRY + " NATURAL JOIN " + TABLE_INGREDIENT, null);
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            Ingredient tempIngredient = new  Ingredient(cursor.getString(0));
+            pantry.add(tempIngredient);
+        }
+
+        return pantry;
+
+
+    }
+
+
 
 
 

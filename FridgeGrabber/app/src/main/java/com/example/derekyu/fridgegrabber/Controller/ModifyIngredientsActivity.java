@@ -1,6 +1,7 @@
 package com.example.derekyu.fridgegrabber.Controller;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Color;
@@ -11,11 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.derekyu.fridgegrabber.Models.Ingredient;
 import com.example.derekyu.fridgegrabber.R;
 import com.example.derekyu.fridgegrabber.tools.PredicateLayout;
 
@@ -81,6 +84,19 @@ public class ModifyIngredientsActivity extends Activity implements RemoveTagDial
                 DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
                 Log.d("BLah", db.getRecipeID());
+                for ( Map.Entry<String, TextView> entry: ingredientTags.entrySet()){
+                    db.insertPantry(new Ingredient(entry.getKey()));
+                }
+
+                List<Ingredient> ingredients = db.getPantry();
+                for (Ingredient i : ingredients){
+                    Log.d("Ingredient", i.getName());
+                }
+
+               // Intent intent = new Intent(ModifyIngredientsActivity.this, ViewIngredientsActivity.class);
+                //startActivity(intent);
+
+
             }
 
         });

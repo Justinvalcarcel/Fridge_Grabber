@@ -231,7 +231,7 @@ public class MainActivity extends Activity {
         Double counter = 0.0d;
         for ( Ingredient i : recipe.getIngredients()){
             for (Ingredient x: userIngredients){
-                if (x.getName().contains(i.getName()) || i.getName().toLowerCase().contains(x.getName())){
+                if (x.getName().toLowerCase().contains(i.getName().toLowerCase()) || i.getName().toLowerCase().contains(x.getName().toLowerCase())){
 
                     counter +=1;
                 }

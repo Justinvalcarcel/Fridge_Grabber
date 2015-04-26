@@ -1,5 +1,6 @@
 package com.example.derekyu.fridgegrabber.Controller;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -17,7 +18,7 @@ import com.example.derekyu.fridgegrabber.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavoriteRecipeListActivity extends ActionBarActivity {
+public class FavoriteRecipeListActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

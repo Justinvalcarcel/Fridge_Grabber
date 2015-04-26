@@ -1,5 +1,6 @@
 package com.example.derekyu.fridgegrabber.Controller;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,7 +8,7 @@ import android.view.MenuItem;
 
 import com.example.derekyu.fridgegrabber.R;
 
-public class ViewIngredientsActivity extends ActionBarActivity {
+public class ViewIngredientsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
