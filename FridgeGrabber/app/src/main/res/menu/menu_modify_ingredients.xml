@@ -4,4 +4,8 @@
     tools:context="com.example.derekyu.fridgegrabber.Controller.ModifyIngredientsActivity">
     <item android:id="@+id/recipes" android:title="Recipes"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/view_ingredients" android:title="View Ingredients"
+        android:orderInCategory="101" app:showAsAction="never" />
+    <item android:id="@+id/favorited_recipes" android:title="Favorited Recipes"
+        android:orderInCategory="102" app:showAsAction="never" />
 </menu>

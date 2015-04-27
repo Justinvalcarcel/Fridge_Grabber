@@ -165,6 +165,10 @@ public class MainActivity extends Activity {
                 intent = new Intent(MainActivity.this, ViewIngredientsActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.favorited_recipes:
+                intent = new Intent(MainActivity.this, FavoriteRecipeListActivity.class);
+                startActivity(intent);
+                break;
             default:
                 break;
         }

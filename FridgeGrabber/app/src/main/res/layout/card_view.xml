@@ -11,8 +11,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/favorite_star"
+            android:layout_alignParentBottom="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/star"/>
         <TextView
             android:id="@+id/recipe_name"
+            android:layout_marginLeft="60dp"
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"/>

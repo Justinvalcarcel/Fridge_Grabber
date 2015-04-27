@@ -1,5 +1,6 @@
 package com.example.derekyu.fridgegrabber.Controller;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +11,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.derekyu.fridgegrabber.Models.Ingredient;
 import com.example.derekyu.fridgegrabber.Models.Recipe;
 import com.example.derekyu.fridgegrabber.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteRecipeListActivity extends Activity {
@@ -21,19 +24,23 @@ public class FavoriteRecipeListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_recipe_list);
+        ActionBar actionBar = getActionBar();
+        String s = "FridgeGrabber";
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(s);
 
         //creates Database object
         DatabaseHelper db = new DatabaseHelper(this);
 
 
         //Uncomment this section if you want to have a test run
-        /*
+
         Ingredient ingredient = new Ingredient("Cheese");
         ArrayList<Ingredient> inglist = new ArrayList<Ingredient>();
         inglist.add(ingredient);
         Recipe test = new Recipe("1","Tacos", "45 minutes", "Cook them!", "favorite", inglist);
         db.insertRecipe(test);
-        */
+
         //Test End
 
         //recipeList is a list of all favorited recipes
@@ -81,8 +88,23 @@ public class FavoriteRecipeListActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Intent intent;
+        switch(id) {
+            case R.id.recipes:
+                intent = new Intent(FavoriteRecipeListActivity.this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.modify_ingredients:
+                intent = new Intent(FavoriteRecipeListActivity.this, ModifyIngredientsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.view_ingredients:
+                intent = new Intent(FavoriteRecipeListActivity.this, ViewIngredientsActivity.class);
+                startActivity(intent);
+                break;
+
+            default:
+                break;
         }
 
 

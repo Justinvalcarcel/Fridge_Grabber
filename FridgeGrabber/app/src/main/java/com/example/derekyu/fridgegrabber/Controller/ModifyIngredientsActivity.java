@@ -289,9 +289,22 @@ public class ModifyIngredientsActivity extends Activity implements RemoveTagDial
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.recipes){
-            Intent intent = new Intent(ModifyIngredientsActivity.this, MainActivity.class);
-            startActivity(intent);
+        Intent intent;
+        switch(id) {
+            case R.id.recipes:
+                intent = new Intent(ModifyIngredientsActivity.this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.view_ingredients:
+                intent = new Intent(ModifyIngredientsActivity.this, ViewIngredientsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.favorited_recipes:
+                intent = new Intent(ModifyIngredientsActivity.this, FavoriteRecipeListActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
