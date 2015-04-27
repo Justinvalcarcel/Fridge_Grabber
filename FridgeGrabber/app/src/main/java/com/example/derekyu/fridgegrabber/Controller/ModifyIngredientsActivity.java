@@ -98,8 +98,8 @@ public class ModifyIngredientsActivity extends Activity implements RemoveTagDial
                     Log.d("Ingredient", i.getName());
                 }
 
-               // Intent intent = new Intent(ModifyIngredientsActivity.this, ViewIngredientsActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(ModifyIngredientsActivity.this, ViewIngredientsActivity.class);
+                startActivity(intent);
 
 
             }
