@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
     private ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
     private String apikey2 = "?api_key=dvxTtAMf3IHeKp2MWGcw564P1drhT4ep";
     private String apikey = "&api_key=dvxTtAMf3IHeKp2MWGcw564P1drhT4ep";
-    private String url = "http://api.bigoven.com/recipes?pg=1&rpp=5&any_kw=";
+    private String url = "http://api.bigoven.com/recipes?pg=1&rpp=1&any_kw=";
     private String urlIngredient = "http://api.bigoven.com/recipe/";
     ConnectivityManager cnMgr;
     private static MainActivity mContext;
@@ -155,15 +155,19 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Intent intent;
+        switch(id) {
+            case R.id.modify_ingredients:
+                intent = new Intent(MainActivity.this, ModifyIngredientsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.view_ingredients:
+                intent = new Intent(MainActivity.this, ViewIngredientsActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
         }
-        else if ( id == R.id.modify_ingredients){
-            Intent intent = new Intent(MainActivity.this, ModifyIngredientsActivity.class);
-            startActivity(intent);
-        }
-
         return super.onOptionsItemSelected(item);
     }
 

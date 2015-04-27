@@ -3,7 +3,6 @@ package com.example.derekyu.fridgegrabber.Controller;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,11 +10,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.derekyu.fridgegrabber.Models.Ingredient;
 import com.example.derekyu.fridgegrabber.Models.Recipe;
 import com.example.derekyu.fridgegrabber.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteRecipeListActivity extends Activity {
@@ -31,7 +28,7 @@ public class FavoriteRecipeListActivity extends Activity {
 
         //Uncomment this section if you want to have a test run
         /*
-        Ingredient ingredient = new Ingredient("Cheese","dairy","5","April 5");
+        Ingredient ingredient = new Ingredient("Cheese");
         ArrayList<Ingredient> inglist = new ArrayList<Ingredient>();
         inglist.add(ingredient);
         Recipe test = new Recipe("1","Tacos", "45 minutes", "Cook them!", "favorite", inglist);

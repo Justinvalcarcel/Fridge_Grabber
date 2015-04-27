@@ -1,7 +1,7 @@
 package com.example.derekyu.fridgegrabber.Controller;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -16,7 +16,7 @@ import com.example.derekyu.fridgegrabber.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeDetails extends ActionBarActivity {
+public class RecipeDetails extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +30,10 @@ public class RecipeDetails extends ActionBarActivity {
 
         Recipe recipe = db.getRecipe(intentRecipeID);
 
-        TextView recipeID = (TextView) this.findViewById(R.id.recipeID);
         TextView recipeName = (TextView) this.findViewById(R.id.recipeName);
         TextView recipeTime = (TextView) this.findViewById(R.id.recipeTime);
         TextView recipeInstructions = (TextView) this.findViewById(R.id.recipeInstructions);
-        recipeID.setText(intentRecipeID);
+
         recipeName.setText(recipe.getName());
         recipeTime.setText(recipe.getTime());
         recipeInstructions.setText(recipe.getInstructions());
@@ -49,9 +48,10 @@ public class RecipeDetails extends ActionBarActivity {
         //I had to convert it to an array because I wrote the Adapter as an Array Adapter
         //final Recipe[] ingredientArray = ingredientList.toArray(new Recipe[ingredientList.size()]);
 
-        ListAdapter ingredientAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ingredientNames);
+        ListAdapter ingredientAdapter = new ArrayAdapter<String>(this, android.R.layout.test_list_item, ingredientNames);
         //ListAdapter phone_adapt = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,contact_phoneNo);
         ListView trip_list_view = (ListView) findViewById(R.id.ingredientList);
+        trip_list_view.setDividerHeight(0);
         trip_list_view.setAdapter(ingredientAdapter);
 
 
