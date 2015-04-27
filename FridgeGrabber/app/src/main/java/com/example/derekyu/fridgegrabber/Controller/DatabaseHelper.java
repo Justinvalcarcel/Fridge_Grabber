@@ -398,8 +398,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return recipeList;
     }
 
-    public List<Ingredient> getPantry(){
-        List<Ingredient> pantry = new ArrayList<Ingredient>();
+    public ArrayList<Ingredient> getPantry(){
+        ArrayList<Ingredient> pantry = new ArrayList<Ingredient>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT " + COLUMN_INAME +" FROM " + TABLE_PANTRY + " NATURAL JOIN " + TABLE_INGREDIENT, null);
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){

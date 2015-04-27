@@ -67,7 +67,6 @@ public class Ingredient implements Parcelable {
     {
         this.name = name;
     }
-
     public String getName()
     {
         return name;
@@ -104,5 +103,8 @@ public class Ingredient implements Parcelable {
         this.expiration = expiration;
     }
     */
+
+    @Override
+    public String toString() { return name; }
 
 }
