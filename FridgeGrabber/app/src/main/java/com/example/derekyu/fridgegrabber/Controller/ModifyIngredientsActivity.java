@@ -63,12 +63,16 @@ public class ModifyIngredientsActivity extends Activity implements RemoveTagDial
             {
                 final String ingredientName = addIngredientsEditText.getText().toString();
 
+                //make input cleaner, prevents duplicates in db
+                String ingName = ingredientName.trim();
+                ingName = ingName.toLowerCase();
+
                 // if something was entered into the edittext box and it only had alphabetic characters
-                if (!ingredientName.isEmpty() && ingredientName.matches("[a-zA-Z]+"))
+                if (!ingredientName.isEmpty() && ingredientName.matches("[a-zA-Z ]+"))
                 {
                     // if ingredient not in the current list, add it
-                    if (!ingredientTags.containsKey(ingredientName))
-                        addIngredientToCurrentList(ingredientName);
+                    if (!ingredientTags.containsKey(ingName))
+                        addIngredientToCurrentList(ingName);
                     // display toast notification that adding ingredient failed
                     else
                         Toast.makeText(getApplicationContext(), "Failed to add " + ingredientName + " - it has already been added!", Toast.LENGTH_SHORT).show();

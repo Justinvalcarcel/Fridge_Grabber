@@ -1,6 +1,8 @@
 package com.example.derekyu.fridgegrabber.Controller;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,9 @@ public class RecipeDetails extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("FridgeGrabber");
 
         DatabaseHelper db = new DatabaseHelper(this);
 
@@ -73,10 +78,26 @@ public class RecipeDetails extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Intent intent;
+        switch(id) {
+            case R.id.recipes:
+                intent = new Intent(RecipeDetails.this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.modify_ingredients:
+                intent = new Intent(RecipeDetails.this, ModifyIngredientsActivity.class);
+                startActivity(intent);
+            case R.id.view_ingredients:
+                intent = new Intent(RecipeDetails.this, ViewIngredientsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.favorited_recipes:
+                intent = new Intent(RecipeDetails.this, FavoriteRecipeListActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
