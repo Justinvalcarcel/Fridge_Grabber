@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.derekyu.fridgegrabber.Models.Ingredient;
@@ -39,7 +40,7 @@ public class MainActivity extends Activity {
     private ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
     private String apikey2 = "?api_key=dvxTtAMf3IHeKp2MWGcw564P1drhT4ep";
     private String apikey = "&api_key=dvxTtAMf3IHeKp2MWGcw564P1drhT4ep";
-    private String url = "http://api.bigoven.com/recipes?pg=1&rpp=1&any_kw=";
+    private String url = "http://api.bigoven.com/recipes?pg=1&rpp=2&any_kw=";
     private String urlIngredient = "http://api.bigoven.com/recipe/";
     ConnectivityManager cnMgr;
     private static MainActivity mContext;
@@ -216,7 +217,7 @@ public class MainActivity extends Activity {
                         Ingredient tempIngredient = new Ingredient(name);
 //                        tempIngredient.setName(name);
                         ingredients.add(tempIngredient);
-                        Log.d("ingredient",name);
+                        //Log.d("ingredient",name);
 
                     }
 
@@ -253,7 +254,6 @@ public class MainActivity extends Activity {
                     startActivity(intent);
                 }
             });
-
         }
     }
 
@@ -265,8 +265,8 @@ public class MainActivity extends Activity {
         Double counter = 0.0d;
         for ( Ingredient i : recipe.getIngredients()){
             for (Ingredient x: userIngredients){
-                Log.d("x", x.getName().toLowerCase());
-                Log.d("i", i.getName().toLowerCase());
+                //Log.d("x", x.getName().toLowerCase());
+                //Log.d("i", i.getName().toLowerCase());
                 if (x.getName().toLowerCase().contains(i.getName().toLowerCase()) || i.getName().toLowerCase().contains(x.getName().toLowerCase())){
 
                     counter +=1;
@@ -277,9 +277,4 @@ public class MainActivity extends Activity {
         matchPercentage.add(Math.round(100.0*matchPercent)/100.0);
 
     }
-
-
-
-
-
 }

@@ -17,9 +17,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import com.example.derekyu.fridgegrabber.Models.Ingredient;
 import com.example.derekyu.fridgegrabber.R;
@@ -92,14 +94,14 @@ public class ModifyIngredientsActivity extends Activity implements RemoveTagDial
             {
                 DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
-                Log.d("BLah", db.getRecipeID());
+                //Log.d("BLah", db.getRecipeID());
                 for ( Map.Entry<String, TextView> entry: ingredientTags.entrySet()){
                     db.insertPantry(new Ingredient(entry.getKey()));
                 }
 
                 List<Ingredient> ingredients = db.getPantry();
                 for (Ingredient i : ingredients){
-                    Log.d("Ingredient", i.getName());
+                    //Log.d("Ingredient", i.getName());
                 }
 
                 Intent intent = new Intent(ModifyIngredientsActivity.this, ViewIngredientsActivity.class);
