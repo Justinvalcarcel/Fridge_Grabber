@@ -32,27 +32,12 @@ public class FavoriteRecipeListActivity extends Activity {
         //creates Database object
         DatabaseHelper db = new DatabaseHelper(this);
 
-
-        //Uncomment this section if you want to have a test run
-
-        Ingredient ingredient = new Ingredient("Cheese");
-        ArrayList<Ingredient> inglist = new ArrayList<Ingredient>();
-        inglist.add(ingredient);
-        Recipe test = new Recipe("1","Tacos", "45 minutes", "Cook them!", "favorite", inglist);
-        db.insertRecipe(test);
-
-        //Test End
-
         //recipeList is a list of all favorited recipes
         List<Recipe> recipeList = db.getFavoriteRecipes();
 
         //I had to convert it to an array because I wrote the Adapter as an Array Adapter
         final Recipe[] recipeArray = recipeList.toArray(new Recipe[recipeList.size()]);
 
-        String testString = recipeArray[0].getName();
-        Integer testsize = recipeList.size();
-        String testtest = Integer.toString(testsize);
-        Log.d("mytag", testtest);
 
         //List Adapters
 

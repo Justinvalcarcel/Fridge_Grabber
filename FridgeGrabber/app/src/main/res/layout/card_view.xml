@@ -36,6 +36,6 @@
         <ImageView
             android:id="@+id/recipe_picture"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="190dp"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>
