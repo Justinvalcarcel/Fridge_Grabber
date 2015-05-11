@@ -6,10 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.derekyu.fridgegrabber.Models.Ingredient;
 import com.example.derekyu.fridgegrabber.Models.Recipe;
@@ -28,7 +29,7 @@ public class RecipeDetails extends Activity {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("FridgeGrabber");
 
-        DatabaseHelper db = new DatabaseHelper(this);
+        final DatabaseHelper db = new DatabaseHelper(this);
 
         Bundle extras = getIntent().getExtras();
         String intentRecipeID = extras.getString("recipeID");
@@ -44,21 +45,49 @@ public class RecipeDetails extends Activity {
         recipeInstructions.setText(recipe.getInstructions());
 
         //Gets the names of the ingredients so that Listview can show them
-        List<Ingredient> ingredientList = db.getRecipeIngredients(intentRecipeID);
-        List<String> ingredientNames = new ArrayList<String>();
+        final List<Ingredient> ingredientList = db.getRecipeIngredients(intentRecipeID);
+        final List<String> ingredientNames = new ArrayList<String>();
         for (Ingredient ingredient : ingredientList){
             ingredientNames.add(ingredient.getName());
         }
 
         //I had to convert it to an array because I wrote the Adapter as an Array Adapter
         //final Recipe[] ingredientArray = ingredientList.toArray(new Recipe[ingredientList.size()]);
-
+/*
         ListAdapter ingredientAdapter = new ArrayAdapter<String>(this, android.R.layout.test_list_item, ingredientNames);
-        //ListAdapter phone_adapt = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,contact_phoneNo);
         ListView trip_list_view = (ListView) findViewById(R.id.ingredientList);
         trip_list_view.setDividerHeight(0);
-        trip_list_view.setAdapter(ingredientAdapter);
+        trip_list_view.setClickable(true);
 
+
+        trip_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                db.removeFromPantry(ingredientList.get(position));
+                Toast.makeText(getBaseContext(), ingredientNames.get(position) + " removed from pantry", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+        trip_list_view.setAdapter(ingredientAdapter);
+        */
+        //
+        final Ingredient[] ingredientArray = ingredientList.toArray(new Ingredient[ingredientList.size()]);
+        final IngredientAdapter ingredientAdapt = new IngredientAdapter(this, R.layout.listview_ingredient_adapter, ingredientArray);
+        ListView recipe_list = (ListView) findViewById(R.id.ingredientList);
+        recipe_list.setAdapter(ingredientAdapt);
+
+        //When you click on a recipe then
+        recipe_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                Ingredient ingredient = ingredientList.get(position);
+
+                        db.removeFromPantry(ingredient);
+                        Toast.makeText(getBaseContext(), ingredientNames.get(position) + " removed from pantry", Toast.LENGTH_SHORT).show();
+                        ingredientAdapt.notifyDataSetChanged();
+
+            }
+        });
 
     }
 

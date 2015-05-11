@@ -8,7 +8,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.example.derekyu.fridgegrabber.Models.Ingredient;
 import com.example.derekyu.fridgegrabber.Models.Recipe;
@@ -171,7 +170,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT " + COLUMN_IID +
                         " FROM " + TABLE_INGREDIENT +
                         " WHERE " + COLUMN_INAME + " = ?",
-                new String [] {ingredient.getName()}
+                new String[]{ingredient.getName()}
         );
 
         return cursor;
@@ -447,15 +446,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Ingredient tempIngredient = new  Ingredient(cursor.getString(0));
             pantry.add(tempIngredient);
         }
-
         return pantry;
-
-
     }
 
+    //Is the ingredient in the pantry?
+    public boolean ingredientInPantry(Ingredient ingredient){
 
+        boolean inPantry = true;
+        String ingredientName = ingredient.getName().toLowerCase();
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_PANTRY_IID + " FROM "
+                        + TABLE_PANTRY + " NATURAL JOIN " + TABLE_INGREDIENT + " WHERE " + COLUMN_INAME + " LIKE ?",
+                new String[]{"%"+ingredientName+"%"}) ;
 
+        if (cursor.getCount() == 0) {
+                inPantry = false;
+            } else {
+                inPantry = true;
+            }
+
+        return inPantry;
+    }
 
 }
-
