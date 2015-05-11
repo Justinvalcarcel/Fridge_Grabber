@@ -450,7 +450,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Is the ingredient in the pantry?
-    public boolean ingredientInPantry(Ingredient ingredient){
+    public boolean  ingredientInPantry(Ingredient ingredient){
 
         boolean inPantry = true;
         String ingredientName = ingredient.getName().toLowerCase();
@@ -466,6 +466,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 inPantry = true;
             }
 
+        return inPantry;
+    }
+
+    public boolean inPantry (Ingredient ingredient) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor pantryCursor = queryIngredientIDFromPantry(ingredient);
+        boolean inPantry = false;
+        if (pantryCursor.getCount() != 0) {
+            inPantry = true;
+
+        }
         return inPantry;
     }
 
