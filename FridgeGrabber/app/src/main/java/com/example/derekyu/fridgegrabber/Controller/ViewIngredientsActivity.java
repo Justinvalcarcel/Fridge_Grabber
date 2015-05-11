@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,10 +29,10 @@ public class ViewIngredientsActivity extends Activity {
         String s = "FridgeGrabber";
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(s);
-        DatabaseHelper db = new DatabaseHelper(this);
+        final DatabaseHelper db = new DatabaseHelper(this);
 
         // get user's current ingredients from database
-        ArrayList<Ingredient> ingredients = db.getPantry();
+        final ArrayList<Ingredient> ingredients = db.getPantry();
 
         //if none in the database, make a toast saying no ingredients were found
         if (ingredients.size() == 0)
@@ -42,9 +44,20 @@ public class ViewIngredientsActivity extends Activity {
         }
 
         // use ArrayAdapter to populate listView with TextView objects from the ingredients ArrayList
-        ArrayAdapter adapter = new ArrayAdapter<Ingredient>(this, android.R.layout.simple_list_item_1, ingredients);
+        final ArrayAdapter adapter = new ArrayAdapter<Ingredient>(this, android.R.layout.simple_list_item_1, ingredients);
         ListView listView = (ListView) findViewById(android.R.id.list);
         listView.setAdapter(adapter);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String message = ingredients.get(position).getName() + " removed";
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                db.removeFromPantry(ingredients.get(position));
+                adapter.remove(ingredients.get(position));
+                adapter.notifyDataSetChanged();
+                return true;
+            }
+        });
 
     }
 

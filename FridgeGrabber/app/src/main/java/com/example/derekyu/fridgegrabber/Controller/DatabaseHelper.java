@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.derekyu.fridgegrabber.Models.Ingredient;
 import com.example.derekyu.fridgegrabber.Models.Recipe;
@@ -217,6 +218,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
 
+    }
+
+    //given ingredient, remove it from Pantry
+    public void removeFromPantry (Ingredient ingredient) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor pantryCursor = queryIngredientIDFromPantry(ingredient);
+        if (pantryCursor.getCount() != 0) {
+            pantryCursor.moveToFirst();
+            String id = String.valueOf(pantryCursor.getLong(0));
+            db.delete(TABLE_PANTRY, COLUMN_PANTRY_IID + " = ?", new String[]{ id});
+        }
     }
 
     // returns the most recently inserted Recipe ID
