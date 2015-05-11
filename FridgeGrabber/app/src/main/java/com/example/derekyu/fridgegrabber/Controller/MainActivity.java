@@ -33,13 +33,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainActivity extends Activity {
 
     private ArrayList<String> imgUrls = new ArrayList<String>();
     private ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
-    private String apikey2 = "?api_key=dvxTtAMf3IHeKp2MWGcw564P1drhT4ep";
-    private String apikey = "&api_key=dvxTtAMf3IHeKp2MWGcw564P1drhT4ep";
+    private Random rand = new Random();
+    private String apikey = "api_key=" + getKey();
     private String url = "http://api.bigoven.com/recipes?pg=1&rpp=2&any_kw=";
     private String urlIngredient = "http://api.bigoven.com/recipe/";
     ConnectivityManager cnMgr;
@@ -47,6 +48,7 @@ public class MainActivity extends Activity {
     LinearLayoutManager layoutManager;
     private ArrayList<Ingredient> userIngredients;
     private ArrayList<Double> matchPercentage = new ArrayList<Double>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,7 @@ public class MainActivity extends Activity {
                 tempUrl = tempUrl.concat("%20" + userIngredients.get(i).getName());
 
             }
+            tempUrl = tempUrl.concat("&");
             tempUrl = tempUrl.concat(apikey);
             tempUrl = tempUrl.replaceAll(" ", "%20");
             Log.d("newURL", tempUrl);
@@ -197,7 +200,7 @@ public class MainActivity extends Activity {
 
                 }
                 for (int i = 0; i < recipeIDs.size(); i++) {
-                    urlIngredient = GET("http://api.bigoven.com/recipe/" + recipeIDs.get(i) + apikey2);
+                    urlIngredient = GET("http://api.bigoven.com/recipe/" + recipeIDs.get(i) + "?" + apikey);
                     Log.d("url", urlIngredient);
                     JSONObject jsonObject = new JSONObject(urlIngredient);
                     JSONArray ingredient = jsonObject.getJSONArray("Ingredients");
@@ -276,5 +279,15 @@ public class MainActivity extends Activity {
         Double matchPercent = counter/ (recipe.getIngredients().size());
         matchPercentage.add(Math.round(100.0*matchPercent)/100.0);
 
+    }
+
+    //gets one of our API keys, randomized so won't get limited
+    public String getKey() {
+        ArrayList<String> keys = new ArrayList<String>();
+        keys.add("dvxTtAMf3IHeKp2MWGcw564P1drhT4ep"); //Derek
+        keys.add("dvx2qMEQbDZX68A5T768iNo55A8Kn8kx"); //David
+
+        int pick = rand.nextInt(keys.size());
+        return keys.get(pick);
     }
 }
