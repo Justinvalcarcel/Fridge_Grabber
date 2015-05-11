@@ -60,7 +60,13 @@ public class RecipeRecycleAdapter extends RecyclerView.Adapter<RecipeViewHolder>
                 DatabaseHelper db = new DatabaseHelper(mContext);
                 Recipe current = new Recipe(recipe.getId(), recipe.getName(),recipe.getTime(),
                         recipe.getInstructions(), "favorite", recipe.getIngredients());
-                db.insertRecipe(current);
+                boolean insertResult = db.insertRecipe(current);
+                if (insertResult) {
+                    Toast.makeText(mContext, "Favorite Added!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(mContext, "Favorite no good", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

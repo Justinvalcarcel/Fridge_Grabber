@@ -94,12 +94,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // only inserts recipe into the table if its not already there
-    public void insertRecipe(Recipe recipe) {
+    public boolean insertRecipe(Recipe recipe) {
 
         Cursor recipeCursor = queryRecipeIDFromRecipeTable(recipe);
 
+        //only insert recipe to db if not already in it
+        boolean recipeNotInDb = (recipeCursor.getCount() == 0);
+
         // if recipe is NOT in the db then add it, along with its used ingredients into the ingredients table
-        if (recipeCursor.getCount() == 0)
+        if (recipeNotInDb)
         {
             ContentValues cv = new ContentValues();
             cv.put(COLUMN_RID, recipe.getId());
@@ -138,6 +141,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.insert(TABLE_RECIPE_INGREDIENT, null, cv1);
             }
         }
+
+        //used to find out if recipe got inserted or not
+        return recipeNotInDb;
     }
 
     // returns a cursor object representing query result (for id) from recipe table for a passed in recipe

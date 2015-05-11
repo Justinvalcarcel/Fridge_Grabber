@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
 
         }
         else {
-            tempUrl = "http://api.bigoven.com/recipes?pg=1&rpp=5&api_key=dvxTtAMf3IHeKp2MWGcw564P1drhT4ep";
+            tempUrl = "http://api.bigoven.com/recipes?pg=1&rpp=2&api_key=dvxTtAMf3IHeKp2MWGcw564P1drhT4ep";
 
         }
         new RecipeSyncTask().execute(tempUrl);
